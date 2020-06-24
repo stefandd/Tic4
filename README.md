@@ -23,4 +23,4 @@ lua/luajit tic4.lua bench
 lobster tic4.lobster -- bench
 ```
 
-![Testimage](test.png)
+![Benchmark results](bench_results.png)
