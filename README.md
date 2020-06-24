@@ -23,4 +23,4 @@ lua/luajit tic4.lua bench
 lobster tic4.lobster -- bench
 ```
 
-![Benchmark results](bench_results.png)
+![Benchmark results](bench_results.png){:height="50%" width="50%"}
