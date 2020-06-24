@@ -22,10 +22,11 @@ One can also run it to *benchmark* the languages and implementations by calling<
 lua/luajit tic4.lua bench
 lobster tic4.lobster -- bench
 ```
+This will evaluate over a million positions (starting from an empty board) and report the time this took.
 
 #### Benchmark results
 <p>
-These are the results for my machine (i5-4690K @3.5GHz) using the latest Lobster (x64 Release using VS2019), Lua 5.1.4, and the HEAD version of Luajit 2.1-beta3. While the Lobster VM is currently only slightly faster than Lua 5.1.4, the version compiled to C++ (using the --cpp switch) even beats Luajit 2.1 quite comfortably which I thought was a remarkable result.
+Below are the results for my machine (i5-4690K @3.5GHz) using the latest Lobster (x64 Release using VS2019), Lua 5.1.4, and the HEAD version of Luajit 2.1-beta3. While the Lobster VM is currently already quite a bit faster than Lua 5.1.4, the version compiled to C++ (using the --cpp switch) even beats Luajit 2.1 quite comfortably which I thought was a remarkable result given the maturity of Luajit.
 
 ![Benchmark results](bench_results.png)
 </p>
