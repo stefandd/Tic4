@@ -120,7 +120,7 @@ function negaMax:negaMax(board, side_to_move, depth, alpha, beta) -- side_to_mov
         --print(string.format("---- Negamax: node info, depth: %d, side: %d, score: %d, best move: %d", depth, side_to_move, score, best_move))
         --print_board(board)
         --print(string.format("----"))
-        print (string.format("Analyzed %d positions", self.numsearchpos))
+        print("Analyzed positions: " .. self.numsearchpos)
         --self.numsearchpos = 0 -- reset call counter
     end
     return score, best_move, game_over

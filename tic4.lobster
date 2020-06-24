@@ -10,7 +10,7 @@ let empty_board = [
 ////////// helper methods
                      
 def print_board(board:[int]):
-    var gboard = ""
+    var gboard = "\n"
     for(board.length) i:
         if board[i] == 0:
             gboard += "."
@@ -52,40 +52,41 @@ class Tic4AI:negamaxAI
             var player_plus_fields, player_minus_fields, empties = 0, 0, 0
             for (curr_qdr) index:
                 if board[index] == 0:
-                    empties = empties + 1
+                    empties++
                 elif board[index] == 1:
-                    player_plus_fields = player_plus_fields + 1
+                    player_plus_fields++
                 elif board[index] == -1:
-                    player_minus_fields = player_minus_fields + 1
+                    player_minus_fields++
             // evaluate the quadruplets score by looking at empty vs occupied positions
-            if empties == 3:
-                if player_plus_fields == 1:
-                    player_plus_score = player_plus_score + 3
-                elif player_minus_fields == 1:
-                    player_minus_score = player_minus_score + 3
-            elif empties == 2:
-                if player_plus_fields == 2:
-                    player_plus_score = player_plus_score + 13
-                elif player_minus_fields == 2:
-                    player_minus_score = player_minus_score + 13
-            elif empties == 1:
-                if player_plus_fields == 3:
-                    player_plus_score = player_plus_score + 31
-                elif player_minus_fields == 3:
-                    player_minus_score = player_minus_score + 31
-            elif empties == 0:
-                // check for winning situations
-                if player_plus_fields == 4:
-                    player_plus_score = 999-depth
-                    player_minus_score = 0
-                    game_won = true
-                    break
-                elif player_minus_fields == 4:
-                    // this should not happen if there is a proper terminal node detection!
-                    player_plus_score = 0
-                    player_minus_score = 999-depth
-                    game_won = true
-                    break
+            switch empties:
+                case 3:
+                    if player_plus_fields == 1:
+                        player_plus_score += 3
+                    elif player_minus_fields == 1:
+                        player_minus_score += 3
+                case 2:
+                    if player_plus_fields == 2:
+                        player_plus_score += 13
+                    elif player_minus_fields == 2:
+                        player_minus_score += 13
+                case 1:
+                    if player_plus_fields == 3:
+                        player_plus_score += 31
+                    elif player_minus_fields == 3:
+                        player_minus_score += 31
+                case 0:
+                    // check for winning situations
+                    if player_plus_fields == 4:
+                        player_plus_score = 999-depth
+                        player_minus_score = 0
+                        game_won = true
+                        break
+                    elif player_minus_fields == 4:
+                        // this should not happen if there is a proper terminal node detection!
+                        player_plus_score = 0
+                        player_minus_score = 999-depth
+                        game_won = true
+                        break
         // return format is score, is_terminal_position
         if not game_won and is_board_full(board):
             return evalstate{0, true} // DRAW
@@ -137,7 +138,7 @@ else:
         if not game_over:
             if curr_player == AI_player:
                 score, curr_move = T4AI.negaMax(game_board, curr_player, 0, 0, 0)
-                print "I am making my move: " + curr_move
+                print "I am making my move: " + (curr_move + 1) // +1 since we used curr_move as 0-based index
                 game_board = T4AI.make_move(game_board, curr_player, curr_move)
                 curr_player = -curr_player
             else:
