@@ -1,45 +1,3 @@
---[[
-
-Negated Minimax
-This is how the pseudo-code of the recursive algorithm looks like. For clarity move making and unmaking is omitted.
-
-int negaMax( int depth ) {
-    if ( depth == 0 ) return evaluate();
-    int max = -oo;
-    for ( all moves)  {
-        score = -negaMax( depth - 1 );
-        if( score > max )
-            max = score;
-    }
-    return max;
-}
-
-How to Use NegaMax
-Once you have your negaMax function – there are two questions which arise – i) how do you initially call negaMax, and ii) if negaMax is only returning an optimal score, then just how is it that you can know which particular move this score is related to? These two questions are related.
-
-One calls negaMax with another root negaMax which makes the call to the negaMax proper with the default search depth. In the body of the loop of this root negaMax, in the loop which generates all the root moves – there one holds a variable as you call negaMax on the movement of each piece – and that is where you find the particular move attached to the score – in the line where you find score > max, right after you keep track of it by adding max = score – in the root negamax, that is where you pick out your move – which is what the root negaMax will return (instead of a score).
-
-Note! In order for negaMax to work, your Static Evaluation function must return a score relative to the side to being evaluated, e.g. the simplest score evaluation could be:
-
-score = materialWeight * (numWhitePieces - numBlackPieces) * who2move 
-where who2move = 1 for white, and who2move = -1 for black.
-
--- from Wikipedia
-function negamax(node, depth, α, β, color) is
-    if depth = 0 or node is a terminal node then
-        return color × the heuristic value of node
-
-    childNodes := generateMoves(node)
-    childNodes := orderMoves(childNodes)
-    value := −∞
-    foreach child in childNodes do
-        value := max(value, −negamax(child, depth − 1, −β, −α, −color))
-        α := max(α, value)
-        if α ≥ β then
-            break (* cut-off *)
-    return value
-
---]]
 
 local negaMax = {maxdepth = 4, minsearchpos = 0, numsearchpos = 0}
 negaMax.__index = negaMax
@@ -81,13 +39,6 @@ function negaMax:negaMax(board, side_to_move, depth, alpha, beta) -- side_to_mov
     -- we abort the recursion if this is a terminal node, or if one of the search abort conditions are met
     -- 
     if is_term_node or depth == self.maxdepth then
-        --[[
-        if math.abs(score) > 990 then -- DEBUG
-            print(string.format("---- Negamax: winning node, depth: %d, side: %d, score: %d", depth, side_to_move, side_to_move*score))
-            print_board(board)
-            print(string.format("----"))
-        end
-        --]]
         return side_to_move*score, best_move, is_term_node
     end
     --
@@ -121,7 +72,6 @@ function negaMax:negaMax(board, side_to_move, depth, alpha, beta) -- side_to_mov
         --print_board(board)
         --print(string.format("----"))
         print("Analyzed positions: " .. self.numsearchpos)
-        --self.numsearchpos = 0 -- reset call counter
     end
     return score, best_move, game_over
 end
