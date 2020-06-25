@@ -104,7 +104,7 @@ function negaMax:evaluate(board, depth) -- return format is score, is_terminal_p
         end
     end
     -- return format is score, is_terminal_position
-    if not game_won and is_board_full(board) then
+    if is_board_full(board) and not game_won then
         return 0, true -- DRAW
     else
         return (player_plus_score - player_minus_score), game_won -- >0 is good for player 1 [+], <0 means good for the other player (player 2 [-]))

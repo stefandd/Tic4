@@ -24,7 +24,7 @@ def print_board(board:[int]):
             gboard += " "
     print gboard
 
-def is_board_full(board:[int]) -> int :
+def is_board_full(board:[int]) -> bool:
     for(board.length) i:
         if board[i] == 0:
             return false
@@ -44,7 +44,7 @@ class Tic4AI:negamaxAI
     ]
 
     // override negaMaxAI class methods for this specific game
-    def evaluate(board:[int], depth:int) -> evalstate: // return format is score, is_terminal_position
+    def evaluate(board:[int], depth:int) -> float, bool:
         var player_plus_score, player_minus_score = 0, 0
         var game_won = false
         for (index_quadruplets) curr_qdr:
@@ -88,10 +88,10 @@ class Tic4AI:negamaxAI
                         game_won = true
                         break
         // return format is score, is_terminal_position
-        if not game_won and is_board_full(board):
-            return evalstate{0, true} // DRAW
+        if is_board_full(board) and not game_won:
+            return 0, true // DRAW
         else:
-            return evalstate{player_plus_score - player_minus_score, game_won} // >0 is good for player 1 [+], <0 means good for the other player (player 2 [-]))
+            return player_plus_score - player_minus_score, game_won // >0 is good for player 1 [+], <0 means good for the other player (player 2 [-]))
 
     // override negaMaxAI class methods for this specific game
     def move_candidates(board:[int]) -> [int]:
@@ -135,8 +135,7 @@ else:
     //T4AI.maxdepth = 5
     while not stop_loop:
         print_board(game_board)
-        let gamestate:evalstate = T4AI.evaluate(game_board, 0)
-        game_over, score = gamestate.terminal, gamestate.score
+        score, game_over = T4AI.evaluate(game_board, 0)
         if not game_over:
             if curr_player == AI_player:
                 score, curr_move = T4AI.negaMax(game_board, curr_player, 0, 0, 0)

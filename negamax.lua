@@ -1,5 +1,5 @@
 
-local negaMax = {maxdepth = 4, minsearchpos = 0, numsearchpos = 0}
+local negaMax = {maxdepth = 4, numsearchpos = 0}
 negaMax.__index = negaMax
 
 function negaMax:evaluate(board, depth)
