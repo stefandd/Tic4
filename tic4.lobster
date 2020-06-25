@@ -120,10 +120,11 @@ var stop_loop = false
 var game_over = 0
 
 let T4AI = Tic4AI {} // create NegaMax class instance
+T4AI.maxdepth = 7
 
 let args = command_line_arguments() // decide wheter to play or to benchmark
 if args.length > 0 and args[0] == "bench":
-    T4AI.maxdepth = 7
+    //T4AI.maxdepth = 7
     let t0 = seconds_elapsed()
     score, curr_move = T4AI.negaMax(game_board, curr_player, 0, 0, 0)
     let t1 = seconds_elapsed()
@@ -131,7 +132,7 @@ if args.length > 0 and args[0] == "bench":
     print "Evaluating an empty board to depth 7 took " + (t1-t0) + " secs."
     return 0
 else:
-    T4AI.maxdepth = 5
+    //T4AI.maxdepth = 5
     while not stop_loop:
         print_board(game_board)
         let gamestate:evalstate = T4AI.evaluate(game_board, 0)

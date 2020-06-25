@@ -136,15 +136,16 @@ local score = 0
 local stop_loop = false
 local game_over = false
 
+negaMax.maxdepth = 7
 
 if #arg == 1 and arg[1] == "bench" then -- decide wheter to play or to benchmark
-    negaMax.maxdepth = 7
+    --negaMax.maxdepth = 7
     local t0 = os.clock()
     score, curr_move = negaMax:negaMax(game_board, curr_player)
     local t1 = os.clock()
     print ("Evaluating an empty board to depth 7 took " .. (t1-t0) .. " secs.")
 else
-    negaMax.maxdepth = 5
+    --negaMax.maxdepth = 5
     while not stop_loop do
         print_board(game_board)
         score, game_over = negaMax:evaluate(game_board, 0)
