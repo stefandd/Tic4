@@ -56,10 +56,10 @@ function negaMax:evaluate(board, depth) -- return format is score, is_terminal_p
     --]]
     local player_plus_score, player_minus_score = 0, 0
     local game_won = false
-    for _, curr_qdr in pairs(negaMax.index_quadruplets) do -- iterate over all index quadruplets
+    for _, curr_qdr in ipairs(negaMax.index_quadruplets) do -- iterate over all index quadruplets
         -- count the empty positions and positions occupied by the side whos move it is
         local player_plus_fields, player_minus_fields, empties = 0, 0, 0
-        for _, index in pairs(curr_qdr) do -- iterate over all indices
+        for _, index in ipairs(curr_qdr) do -- iterate over all indices
             if board[index] == 0 then
                 empties = empties + 1
             elseif board[index] == 1 then

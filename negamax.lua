@@ -47,7 +47,7 @@ function negaMax:negaMax(board, side_to_move, depth, alpha, beta) -- side_to_mov
     local moves = self:move_candidates(board, side_to_move)
     score = -math.huge    
 
-    for _, analyzed_move in pairs(moves) do -- iterate over all boards
+    for _, analyzed_move in ipairs(moves) do -- iterate over all boards
         self.numsearchpos = self.numsearchpos + 1
         local b = self:make_move(board, side_to_move, analyzed_move)
         local move_score, _, _ = -self:negaMax(b, -side_to_move, depth+1, -beta, -alpha)
