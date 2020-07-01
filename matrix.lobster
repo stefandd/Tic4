@@ -36,5 +36,5 @@ let t0 = seconds_elapsed()
 let c = mul(a, b)
 let t1 = seconds_elapsed()
 
-print(c[0][0])
-print(t1-t0)
+print c[0][0]
+print "This took " + (t1-t0) + "s"
