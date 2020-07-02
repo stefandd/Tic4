@@ -18,7 +18,7 @@ def mul(a:[[float]], b:[[float]]):
         for (p) j:
             var sum, ai, cj = 0.0, a[i], c[j]
             for (n) k:
-                sum = sum + ai[k] * cj[k]
+                sum += ai[k] * cj[k]
             xi.push(sum)
     return x
 
