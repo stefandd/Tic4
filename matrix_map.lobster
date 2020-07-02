@@ -3,11 +3,9 @@ import std
 
 def T(a:[[float]]):
     let m, n, x = a.length, a[0].length, []
-    for (n) i:
-        x.push([])
-        for (m) j:
-            x[i].push(a[j][i])
-    return x
+    return map(n) i:
+                map(m) j:
+                    a[j][i]
 
 def mul(a:[[float]], b:[[float]]):
     assert a[0].length == b.length
@@ -21,12 +19,10 @@ def mul(a:[[float]], b:[[float]]):
                     sum
 
 def matgen(n):
-    let a, tmp = [], 1.0 / n / n
-    for (n) i:
-        a.push([])        
-        for (n) j:
-            a[i].push(tmp * (i - j) * (i + j)) // in the Lua version it says -2 here, but the indices in Lobster are 0-based
-    return a
+    let tmp = 1.0 / n / n
+    return map(n) i:
+                map(n) j:
+                    tmp * (i - j) * (i + j)
 
 let n = 800
 let a, b = matgen(n), matgen(n)
