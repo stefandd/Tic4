@@ -1,4 +1,5 @@
 // Writen by Attractive Chaos; distributed under the MIT license // converted to Lobster
+import std
 
 def T(a:[[float]]):
     let m, n, x = a.length, a[0].length, []
@@ -12,15 +13,12 @@ def mul(a:[[float]], b:[[float]]):
     assert a[0].length == b.length
     let m, n, p, x = a.length, a[0].length, b[0].length, []
     let c = T(b) // transpose for efficiency
-    for (m) i:
-        x.push([])
-        let xi = x[i]
-        for (p) j:
-            var sum, ai, cj = 0.0, a[i], c[j]
-            for (n) k:
-                sum += ai[k] * cj[k]
-            xi.push(sum)
-    return x
+    return map(m) i:
+                map(p) j:
+                    var sum, ai, cj = 0.0, a[i], c[j]
+                    for (n) k:
+                        sum += ai[k] * cj[k]
+                    sum
 
 def matgen(n):
     let a, tmp = [], 1.0 / n / n
