@@ -57,5 +57,4 @@ local c = matrix.mul(a, b);
 t1 = os.clock()
 
 print(c[1][1]);
-print("This took " .. (t1-t0) .. "s")
-
+print("This took ".. tostring(t1-t0) .."s")
