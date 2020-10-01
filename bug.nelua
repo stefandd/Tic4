@@ -1,0 +1,11 @@
+require 'sequence'
+require 'raylib'
+
+local region = @record {
+    text_rbuffer: sequence(integer),
+    text_c1buffer: sequence(Color),
+    text_c2buffer: sequence(Color),
+    extend_x: integer,
+    extend_y: integer,
+    alpha_chr: integer,
+}
