@@ -1,0 +1,6 @@
+-- links: 
+
+## linklib 'gdi32'
+## linklib 'user32'
+## linklib 'shell32'
+## linklib 'winmm' 
