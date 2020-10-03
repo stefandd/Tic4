@@ -1,6 +1,5 @@
 import std
 import vec
-import date_time
 
 let PI = 3.1415926535897932384626433
 let SOLAR_MASS = 4.*PI*PI
@@ -85,9 +84,9 @@ def nbodies(n):
 def main():
     offset_momentum()
     print("\ninitial energy " + energy() + "\n")
-    let t0 = date_time()[dt_epoch]
+    let t0 = seconds_elapsed()
     nbodies(5000000)
     print("\nresulting energy " + energy() + "\n")
-    print date_time()[dt_epoch] - t0
+    print seconds_elapsed() - t0
 
 main()

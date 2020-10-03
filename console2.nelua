@@ -1,0 +1,148 @@
+require 'vector'
+require 'string'
+require 'math'
+require 'raylib'
+require 'winlibs'
+
+## cflags '-O3 -ffast-math' 
+
+local console = @record {
+    running: boolean,
+    font: Font,
+    fontsize_y: integer,
+    fontsize_x: integer,
+    lineheight: integer,
+    num_cells_x: integer,
+    num_cells_y: integer,
+    border_cells_x: integer,
+    border_cells_y: integer,
+    window_x: integer,
+    window_y: integer,
+    screen_x: integer,
+    screen_y: integer,
+    scale_x: float32,
+    scale_y: float32,
+    border_color: Color,
+    border_show: boolean,
+    text_color: Color,
+    background_color: Color,
+    tab_num_spaces: integer,
+    ulc_buffer_idx: integer,
+    ulc_x_px: integer,
+    ulc_y_px: integer,
+    render_tx: RenderTexture2D
+}
+
+local text_rbuffer: [2000]byte
+local text_c1buffer: [2000]Color
+local text_c2buffer: [2000]Color
+
+function console:randomize()
+    local idx: integer = 0
+    local rndfunc = math.random -- Raylib.GetRandomValue
+    for j = 0, < self.num_cells_y do -- loop over rows
+        for i = 0, < self.num_cells_x do -- loop over cols
+            text_rbuffer[idx] = 32 + rndfunc(0, 90)
+            text_c1buffer[idx] = Color{rndfunc(0, 255), rndfunc(0, 255), rndfunc(0, 255), 255}
+            text_c2buffer[idx] = Color{rndfunc(0, 255), rndfunc(0, 255), rndfunc(0, 255), 255}
+            idx = idx + 1
+        end
+    end
+end
+    
+function console:default()
+    self.fontsize_y = 16
+    self.fontsize_x = 16
+    self.lineheight = 16
+    self.num_cells_x = 40
+    self.num_cells_y = 25
+    self.border_cells_x = 3
+    self.border_cells_y = 2
+    self.scale_x = 1.0
+    self.scale_y = 1.0
+    self.border_color = Color{75, 75, 75, 255}
+    self.border_show = false
+    self.text_color = Color{0, 0, 0, 255}
+    self.background_color = Color{50, 50, 255, 255}
+    self.tab_num_spaces = 4
+    self.ulc_buffer_idx = 0    
+    self:randomize()
+end
+
+function console:init()
+    self:default()
+    self.screen_x = self.num_cells_x * self.fontsize_x
+    self.screen_y = self.num_cells_y * self.fontsize_y
+    --self.ulc_x_px_ = (@integer)(self.scale_x * self.border_cells_x * self.fontsize_x)
+    --self.ulc_y_px_ = (@integer)(self.scale_y * self.border_cells_y * self.fontsize_y + (window_xy_.y - scale_y * orig_height)/2.0)
+    Raylib.SetConfigFlags(ConfigFlag.FLAG_WINDOW_RESIZABLE)
+    Raylib.InitWindow(self.screen_x, self.screen_y, "ASCII console example")
+    --Raylib.SetTargetFPS(60) -- Set our game to run at 60 frames-per-second
+    -- NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
+    self.render_tx = Raylib.LoadRenderTexture(self.screen_x, self.screen_y)
+    self.font = Raylib.LoadFont("Px437_IBM_BIOS.ttf")   
+end
+
+function console:textdraw() <inline>
+    local idx: integer = 0
+    local col_pix: integer = 0
+    local row_pix: integer = 0
+    local font = self.font
+    local fontsize_x, fontsize_y = self.fontsize_x, self.fontsize_y
+    for j = 0, < self.num_cells_y do -- loop over rows
+        col_pix = 0
+        for i = 0, < self.num_cells_x do -- loop over cols
+            Raylib.DrawRectangle(col_pix, row_pix, fontsize_x, fontsize_y, text_c2buffer[idx])
+            Raylib.DrawTextEx(font, string.char(text_rbuffer[idx]), {col_pix, row_pix}, fontsize_x, 0, text_c1buffer[idx])
+            idx = idx + 1
+            col_pix = col_pix + fontsize_x
+        end
+        row_pix = row_pix + fontsize_y
+    end
+end
+
+function console:draw() <inline>
+    if self.border_show then
+        Raylib.ClearBackground(self.border_color)
+        --Raylib.DrawRectangle(col_pix, row_pix, fontsize_x, fontsize_y, text_c2buffer[idx])
+    else
+        --gl_clear(background_color)
+    end
+    self:textdraw()
+end
+
+function console:run()
+    local t_last: float64 = Raylib.GetTime()
+    local frames: integer = 0
+    local render_tx = self.render_tx
+    local srcrect = Rectangle{0, 0, self.screen_x, -self.screen_y}
+    local insertpos = Vector2{0, 0}
+    while not Raylib.WindowShouldClose() do -- Detect window close button or ESC key
+        local dstrect = Rectangle{0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight()}
+        local t_now = Raylib.GetTime()
+        frames = frames + 1
+        self:randomize()
+        Raylib.BeginDrawing()
+            --Raylib.BeginShaderMode(shader)
+            --Raylib.EndShaderMode()
+            Raylib.BeginTextureMode(render_tx)
+                self:draw()
+                Raylib.DrawFPS(0, 0)                
+            Raylib.EndTextureMode()
+            Raylib.ClearBackground(BLACK)
+            Raylib.DrawTexturePro(render_tx.texture, srcrect, dstrect, insertpos, 0, WHITE) -- -screen_height to flip the texture back to right side up
+        Raylib.EndDrawing()
+        if t_now - t_last > 1.0 then
+            print(string.format("FPS: %d", frames))
+            t_last = t_now
+            frames = 0
+        end
+    end
+    Raylib.UnloadFont(self.font)
+    Raylib.UnloadRenderTexture(self.render_tx)
+    Raylib.CloseWindow() -- Close window and OpenGL context
+end
+
+local c: console
+c:init()
+c:run()
