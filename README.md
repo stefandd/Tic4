@@ -26,7 +26,7 @@ This will compute the best move from an empty board to a search depth of 7 start
 
 #### Benchmark results
 <p>
-Below are the results for my machine (i5-4690K @3.5GHz) using the latest Lobster (x64 Release using VS2019), Lua 5.1.4, the Lua 5.4beta, and the HEAD version of Luajit 2.1-beta3. While the Lobster VM is currently already quite a bit faster than Lua 5.1.4 and Lua 5.4, the version compiled to C++ (using the --cpp switch) even beats Luajit 2.1 which I think is remarkable given the maturity of Luajit. A different C++ compiler might even increase the advantage...
+Below are the results for my machine (i5-4690K @3.5GHz) using the latest Lobster in JIT mode (x64 Release using MingW), the C++-compiled Lobster code (x64 Release using MingW), the Lua 5.4beta, and the HEAD version of Luajit 2.1-beta3. While the Lobster JIT is currently already quite a bit faster than Lua 5.4, the version compiled to C++ (using the --cpp switch) even beats Luajit 2.1 which I think is remarkable given the maturity of Luajit. A different C++ compiler might even increase the advantage...
 
 ![Benchmark results](bench_results.png)
 </p>
