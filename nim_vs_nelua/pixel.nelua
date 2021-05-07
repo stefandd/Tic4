@@ -1,0 +1,51 @@
+## cflags '-O3 -march=native' 
+
+require 'math'
+require 'raylib'
+
+## linklib 'gdi32'
+## linklib 'user32'
+## linklib 'shell32'
+## linklib 'winmm' 
+
+local screen_width: integer <comptime> = 1024
+local screen_height: integer <comptime> = 768
+
+Raylib.InitWindow(screen_width, screen_height, "raylib pixel fill test")
+
+-- NOTE: Textures/Images must be loaded after Window initialization (OpenGL context is required)
+local image = Raylib.GenImageColor(screen_width, screen_height, LIGHTGRAY)
+Raylib.ImageFormat(&image, PixelFormat.UNCOMPRESSED_R8G8B8A8)  -- Format image to RGBA 32bit (required for screentex update) <-- ISSUE
+local screentex = Raylib.LoadTextureFromImage(image) -- Image converted to screentex, GPU memory (VRAM)
+local screenptr : *[0]Color = Raylib.GetImageData(image) -- Get pixel data from image (RGBA 32bit)
+local t_last : float64 = Raylib.GetTime()
+local frames : integer = 0
+
+local function randpixel()
+	local rndfunc = math.random -- Raylib.GetRandomValue
+    for i: integer = 0, < screen_width * screen_height do
+        screenptr[i] = { rndfunc(0, 255), rndfunc(0, 255), rndfunc(0, 255), 255 }
+    end	
+end
+
+randpixel()
+while not Raylib.WindowShouldClose() do -- Detect window close button or ESC key
+	frames = frames + 1
+	randpixel()
+    Raylib.UpdateTexture(screentex, screenptr)
+    Raylib.BeginDrawing()
+        Raylib.ClearBackground(BLACK)
+        Raylib.DrawTexture(screentex, 0, 0, WHITE)            
+        Raylib.DrawFPS(0, 0)
+    Raylib.EndDrawing()
+    local t_now : float64 = Raylib.GetTime()
+    if t_now - t_last > 1.0 then
+        print("FPS: ", frames)
+        t_last = t_now
+        frames = 0
+	end
+end
+
+Raylib.UnloadTexture(screentex)
+Raylib.UnloadImage(image)
+Raylib.CloseWindow() -- Close window and OpenGL context
